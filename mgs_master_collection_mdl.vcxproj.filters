@@ -24,13 +24,7 @@
     <ClCompile Include="noesis\plugin\pluginsupport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\half\eLut.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\half\half.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\half\toFloat.cpp">
+    <ClCompile Include="include\openexr\IlmBase\Half\half.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ps2\PS2Textures.cpp">
@@ -82,22 +76,7 @@
     <ClInclude Include="motion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\half\eLut.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\half\half.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\half\halfExport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\half\halfFunction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\half\halfLimits.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\half\toFloat.h">
+    <ClInclude Include="include\openexr\IlmBase\Half\half.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mgs\motion\mtar\mtcm.h">

@@ -141,9 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\half\eLut.cpp" />
-    <ClCompile Include="include\half\half.cpp" />
-    <ClCompile Include="include\half\toFloat.cpp" />
+    <ClCompile Include="include\openexr\IlmBase\Half\half.cpp" />
     <ClCompile Include="mgs\texture\tri.cpp" />
     <ClCompile Include="mgs_master_collection_mdl.cpp" />
     <ClCompile Include="noesis\plugin\noesisplugin.cpp" />
@@ -155,12 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bone.h" />
-    <ClInclude Include="include\half\eLut.h" />
-    <ClInclude Include="include\half\half.h" />
-    <ClInclude Include="include\half\halfExport.h" />
-    <ClInclude Include="include\half\halfFunction.h" />
-    <ClInclude Include="include\half\halfLimits.h" />
-    <ClInclude Include="include\half\toFloat.h" />
+    <ClInclude Include="include\openexr\IlmBase\Half\half.h" />
     <ClInclude Include="mat.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="mgs\common\fileutil.h" />

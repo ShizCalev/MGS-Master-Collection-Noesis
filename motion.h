@@ -4,7 +4,7 @@
 #include "mgs/motion/mtar/mtcm.h"
 #include "noesis/plugin/pluginshare.h"
 
-#include "include/half/half.h"
+#include "include/openexr/IlmBase/Half/half.h"
 
 const double g_mgsmc_PI = acos(-1);
 const float  g_mgsmc_GAME_FRAMERATE = 30.0f;
