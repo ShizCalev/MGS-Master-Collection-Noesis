@@ -36,7 +36,7 @@
 
 #include "PS2Textures.h"
 
-unsigned int gsmem[2][1024 * 1024];
+thread_local unsigned int gsmem[2][1024 * 1024];
 
 void* GetGSmem(int memidx)
 {
