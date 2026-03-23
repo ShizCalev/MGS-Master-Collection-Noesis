@@ -84,11 +84,22 @@ void Tri::initMemory()
 	writeTexPSMCT32(0, 1, 0, 0, width, header->clutHeight, 1, &triData[header->clutOffset]);
 }
 
-uint8_t extendAlpha(uint8_t a) {
-	return uint8_t((a / 0x80) * 255);
+
+uint8_t extendAlpha(uint8_t a)
+{
+    if (IsNoesisExporting)					// Tri textures are stored in the PS2's alpha range of 0->128, where 128 is fully opaque.
+    {										// This will clamp the alpha (fixing transparent textures losing data) and export them in the PS2 alpha range.
+        if (a >= 0x80) return 0x80;			// This way, exported textures will function correctly within the game's engine, which still operates with the original alpha range.
+        return a;
+    }
+
+	// Otherwise, when viewing in Noesis, we want to extend alpha to the full 0->255 range so everything doesn't appear half-transparent.
+	if (a >= 0x80) return 0xFF;
+	return (a << 1) | (a >> 6);
 }
 
-uint8_t* Tri::paintPixels(TriColour* clut, uint8_t* pixels, int width, int height, int maxWidth, int& size, int16_t xOffset, int16_t yOffset)
+
+uint8_t* Tri::paintPixels(TriColour* clut, uint8_t* pixels, int width, int height, int maxWidth, int& size, int16_t xOffset, int16_t yOffset, bool skip_extend)
 {
 	size = width * height * 4;
 	uint8_t* texture = new uint8_t[size];
@@ -105,7 +116,7 @@ uint8_t* Tri::paintPixels(TriColour* clut, uint8_t* pixels, int width, int heigh
 			texture[pos + 0] = clut[pixels[pixelPos]].b;
 			texture[pos + 1] = clut[pixels[pixelPos]].g;
 			texture[pos + 2] = clut[pixels[pixelPos]].r;
-			texture[pos + 3] = extendAlpha(clut[pixels[pixelPos]].a);
+			texture[pos + 3] = skip_extend ? clut[pixels[pixelPos]].a : extendAlpha(clut[pixels[pixelPos]].a);
 			i++;
 		}
 
@@ -152,8 +163,20 @@ uint8_t* Tri::getTextureIndexed(int idx, int& size)
 	//calculation of actual texture sizes
 	int texX = (int)(info->uOffset * imageWidth);
 	int texY = (int)(info->vOffset * imageHeight);
-	int texWidth = (int)(info->uScale * imageWidth) + 1;
-	int texHeight = (int)(info->vScale * imageHeight) + 1;
+
+	float rawW = info->uScale * imageWidth;
+	float rawH = info->vScale * imageHeight;
+
+    // MGS3's Tri atlas entries use one of two UV conventions:
+    // Some address texels by center (offsets like 0.5, 64.5) and encode (size - 1) in scale.
+    // Others address by edge (offsets like 0, 64, 128) and encode exact size in scale.
+    // A fractional offset distinguishes the two conventions.
+	float texelU = info->uOffset * imageWidth;
+	float texelV = info->vOffset * imageHeight;
+	bool centerAddressed = (texelU - floorf(texelU) > 0.25f) || (texelV - floorf(texelV) > 0.25f);
+
+	int texWidth = (int)rawW + (centerAddressed ? 1 : 0);
+	int texHeight = (int)rawH + (centerAddressed ? 1 : 0);
 
 	int memsize = 1024 * 1024 * 4;
 	uint8_t* texBuffer = new uint8_t[memsize]();
@@ -161,6 +184,7 @@ uint8_t* Tri::getTextureIndexed(int idx, int& size)
 
 	int clutWidth = 8;
 	int clutHeight = 2;
+	bool skipAlphaDoubling = false;
 
 	//switch on psm
 	switch (info->registerInfo2.PSM) {
@@ -169,6 +193,7 @@ uint8_t* Tri::getTextureIndexed(int idx, int& size)
 		clutHeight = 16;
 		size = texWidth * texHeight;
 		readTexPSMT8(info->registerInfo2.TBP0, info->registerInfo2.TBW, texX, texY, texWidth, texHeight, 0, (void*)texBuffer);
+		skipAlphaDoubling = IsNoesisExporting; // Skip alpha expansion when exporting to preserve PS2's 0-128 alpha range. Noesis preview expands to 0-255.
 		break;
 	case 0x14:
 		clutWidth = 8;
@@ -197,7 +222,7 @@ uint8_t* Tri::getTextureIndexed(int idx, int& size)
 		delete[] texBuffer;
 	}
 
-	uint8_t* pixels = paintPixels((TriColour*)clutBuffer, expandedOut, texWidth, texHeight, texWidth, size, 0, 0);
+	uint8_t* pixels = paintPixels((TriColour*)clutBuffer, expandedOut, texWidth, texHeight, texWidth, size, 0, 0, skipAlphaDoubling);
 	delete[] expandedOut;
 	delete[] clutBuffer;
 

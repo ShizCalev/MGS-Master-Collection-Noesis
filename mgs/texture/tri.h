@@ -98,5 +98,7 @@ private:
 
 	void initMemory();
 	int getIdx(uint32_t strcode);
-	uint8_t* paintPixels(TriColour* clut, uint8_t* pixels, int width, int height, int maxWidth, int& size, int16_t xOffset, int16_t yOffset);
+	uint8_t* paintPixels(TriColour* clut, uint8_t* pixels, int width, int height, int maxWidth, int& size, int16_t xOffset, int16_t yOffset, bool skip_extend);
 };
+
+inline bool IsNoesisExporting = false;

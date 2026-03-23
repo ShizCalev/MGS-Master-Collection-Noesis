@@ -55,6 +55,7 @@ noesisTex_t* loadTexture(noeRAPI_t* rapi, uint32_t& strcode)
     int size, bpp;
 
     Tri tri = Tri(triFile);
+    IsNoesisExporting = rapi->Noesis_IsExporting(); //If exporting, dump the original PS2 alpha range. Else if viewing, double alpha levels so things aren't half-transparent.
     uint8_t* texData = tri.getTexture(strcode, size, bpp);
 
     noesisTex_t* noeTexture = rapi->Noesis_LoadTexByHandler(texData, size, ".tga");

@@ -7,8 +7,12 @@ It currently supports kms, evm and mdl files for models, tri files for textures 
 The winding order in mgs3 mdl files issue is still prevelant in this version and thus those models are rendered two sided.
 
 ### Latest Changes
+ - Fixed transparent textures missing data/being invisible.
  - Added support for viewing MGS2 KMS, EVM models and MAR motions
  - Added preliminary support for viewing Master Collection CMDL models 
+ 
+ ### To-Do
+ - Fix tri/texture strcode collisions resulting in some incorrect textures being displayed. (Some textures are pulled from the incorrect tris due to brute-force look-up.) #6
 
 ##  Usage.
 
@@ -20,3 +24,4 @@ There is only one option which when checked allows you to load Mtar or Mar anima
 
 ##### Prompt for Motion Archive
 This option will allow you to choose an Mtar or Mar file after the model has loaded. This allows you to view animations provided the bones match.
+
