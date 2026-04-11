@@ -198,7 +198,7 @@ uint8_t* Tri::getTextureIndexed(int idx, int& size)
 	case 0x14:
 		clutWidth = 8;
 		clutHeight = 2;
-		size = texWidth * texHeight / 2;
+		size = (texWidth * texHeight + 1) / 2;
 		readTexPSMT4(info->registerInfo2.TBP0, info->registerInfo2.TBW, texX, texY, texWidth, texHeight, 0, (void*)texBuffer);
 		break;
 	}
